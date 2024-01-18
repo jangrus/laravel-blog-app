@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Comment;
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,12 +14,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comment', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Post::class)->nullable();
+            $table->foreignIdFor(Comment::class)->nullable();
             $table->unsignedBigInteger('parent_post')->nullable();;
-            $table->foreign('parent_post')->references('id')->on('post')->onDelete('cascade');
+            $table->foreign('parent_post')->references('id')->on('posts')->onDelete('cascade');
             $table->unsignedBigInteger('parent_comment')->nullable();
-            $table->foreign('parent_comment')->references('id')->on('comment')->onDelete('cascade');
+            $table->foreign('parent_comment')->references('id')->on('comments')->onDelete('cascade');
             $table->string('header');
             $table->text('content');
             $table->unsignedBigInteger('created_by')->nullable();
