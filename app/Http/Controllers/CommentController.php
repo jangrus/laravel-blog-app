@@ -7,6 +7,8 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
+use function PHPUnit\Framework\isNull;
+
 class CommentController extends Controller
 {
 
@@ -31,12 +33,19 @@ class CommentController extends Controller
      */
     public function store(Request $request, Post $post)
     {
+
         $data = $request->validate(['content' => ['required', 'string', 'max:255']]);
-
         $post->comments()->create([...$data, 'user_id' => $request->user()->id]);
-
         return to_route('posts.show', $post)->withFragment('comments');
     }
+
+    public function nestedComment(Request $request, Post $post, Comment $comment)
+    {
+        $data = $request->validate(['content' => ['required', 'string', 'max:255']]);
+        $comment->comments()->create([...$data, 'post_id' => $request->input('post_id'), 'user_id' => $request->user()->id]);
+        return to_route('posts.show', $post)->withFragment('comments');
+    }
+
 
     /**
      * Display the specified resource.

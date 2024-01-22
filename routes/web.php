@@ -34,3 +34,7 @@ require __DIR__.'/auth.php';
 
 Route::resource('posts', PostController::class);
 Route::middleware('auth')->resource('posts.comments', CommentController::class);
+
+Route::post('posts/{post}/comments/{comment}/store', [CommentController::class, 'nestedComment'])
+    ->middleware('auth')
+    ->name('comment.comment');
