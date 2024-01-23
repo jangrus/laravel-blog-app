@@ -6,6 +6,7 @@ namespace App\Providers;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -31,6 +32,21 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('isCommenter', function(User $user, Comment $comment) {
             return  $user->id === $comment->user_id;
+        });
+
+        Gate::define('isAdminRole', function() {
+            $policy = resolve(UserPolicy::class);
+            return $policy->isAdminRole();
+        });
+
+        Gate::define('isPosterRole', function() {
+            $policy = resolve(UserPolicy::class);
+            return $policy->isPosterRole();
+        });
+
+        Gate::define('isCommenterRole', function() {
+            $policy = resolve(UserPolicy::class);
+            return $policy->isCommenterRole();
         });
     }
 }
