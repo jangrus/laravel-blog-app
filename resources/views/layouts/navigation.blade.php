@@ -15,9 +15,20 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @auth
+                        <x-nav-link :href="route('myposts')" :active="request()->routeIs('myposts')">
+                            {{ __('Posts') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('mycomments')" :active="request()->routeIs('mycomments')">
+                            {{ __('Comments') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('posts.create')" :active="request()->routeIs('posts.create')">
+                            {{ __('Create Post') }}
+                        </x-nav-link>
+                    @endauth
                 </div>
             </div>
-
+            @auth
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
@@ -51,7 +62,7 @@
                     </x-slot>
                 </x-dropdown>
             </div>
-
+            @endauth
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
@@ -71,7 +82,7 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
-
+        @auth
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
@@ -96,5 +107,6 @@
                 </form>
             </div>
         </div>
+        @endauth
     </div>
 </nav>

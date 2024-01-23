@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +31,18 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::resource('posts', PostController::class);
+Route::middleware('auth')->resource('posts.comments', CommentController::class);
+
+Route::post('posts/{post}/comments/{comment}/store', [CommentController::class, 'nestedComment'])
+    ->middleware('auth')
+    ->name('comment.comment');
+
+Route::get('myposts', [PostController::class, 'userPosts'])
+    ->middleware('auth')
+    ->name('myposts');
+
+Route::get('mycomments', [CommentController::class, 'userComments'])
+    ->middleware('auth')
+    ->name('mycomments');
