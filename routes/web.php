@@ -38,3 +38,11 @@ Route::middleware('auth')->resource('posts.comments', CommentController::class);
 Route::post('posts/{post}/comments/{comment}/store', [CommentController::class, 'nestedComment'])
     ->middleware('auth')
     ->name('comment.comment');
+
+Route::get('myposts', [PostController::class, 'userPosts'])
+    ->middleware('auth')
+    ->name('myposts');
+
+Route::get('mycomments', [CommentController::class, 'userComments'])
+    ->middleware('auth')
+    ->name('mycomments');

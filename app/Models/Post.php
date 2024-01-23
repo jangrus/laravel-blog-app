@@ -16,6 +16,7 @@ class Post extends Model
         'header',
         'content',
         'topic_id',
+        'user_id',
         'created_by',
         'updated_by'
     ];
@@ -44,7 +45,7 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function html()
+    public function html(): Attribute
     {
         return Attribute::get(fn () => str($this->content)->markdown());
     }

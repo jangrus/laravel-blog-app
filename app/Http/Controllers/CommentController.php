@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 use function PHPUnit\Framework\isNull;
@@ -33,9 +35,17 @@ class CommentController extends Controller
      */
     public function store(Request $request, Post $post)
     {
+        $request->validate(['content' => ['required', 'string', 'max:255']]);
+        //$post->comments()->create([...$data, 'user_id' => $request->user()->id]);
 
-        $data = $request->validate(['content' => ['required', 'string', 'max:255']]);
-        $post->comments()->create([...$data, 'user_id' => $request->user()->id]);
+        $data = $request->all();
+        $data['header'] = "a";
+        $data['user_id'] = Auth::id();
+        $data['post_id'] = $post->id;
+        $data['parent_post'] = $post->id;
+        $data['created_by'] = Auth::id();
+
+        Comment::create($data);
         return to_route('posts.show', $post)->withFragment('comments');
     }
 
@@ -44,6 +54,13 @@ class CommentController extends Controller
         $data = $request->validate(['content' => ['required', 'string', 'max:255']]);
         $comment->comments()->create([...$data, 'post_id' => $request->input('post_id'), 'user_id' => $request->user()->id]);
         return to_route('posts.show', $post)->withFragment('comments');
+    }
+
+    public function userComments()
+    {
+        return view('posts.show-comments', [
+            'comments' => Comment::where('user_id', Auth::id())->get(),
+        ]);
     }
 
 

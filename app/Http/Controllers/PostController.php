@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -18,8 +19,8 @@ class PostController extends Controller
 
     public function create()
     {
-        $category = Category::all();
-        return view('posts.create', compact('category'));
+        $categories = Category::all();
+        return view('posts.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -27,11 +28,12 @@ class PostController extends Controller
         $request->validate([
             'header' => 'required',
             'content' => 'required',
-            'topic_id' => 'required|exists:category,id',
+            'topic_id' => 'required|exists:categories,id',
         ]);
 
         $postData = $request->all();
-        $postData['created_by'] = auth()->id();
+        $postData['user_id'] = Auth::id();
+        $postData['created_by'] = Auth::id();
 
         Post::create($postData);
     }
@@ -41,6 +43,14 @@ class PostController extends Controller
         return view('posts.show', [
             'post' => $post,
             'comments' => $post->comments()->latest()->with('user')->paginate(10),
+        ]);
+    }
+
+    public function userPosts()
+    {
+        $id = Auth::id();
+        return view('posts.index', [
+            'posts' => User::find($id)->posts,
         ]);
     }
 }
