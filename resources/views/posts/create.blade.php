@@ -10,21 +10,19 @@
                             <p style="color: green;">{{ session('success') }}</p>
                         @endif
 
-                        <form action="{{ route('posts.store') }}" method="POST">
+                        <form action="{{ route('posts.store') }}" method="post">
                             @csrf
                             <div>
                                 <x-input-label for="header" :value="__('Header')" />
                                 <x-text-input id="header" class="block mt-1 w-full" type="text" name="header" :value="old('header')" required autofocus autocomplete="header" />
                             </div>
-
-                            <!-- Surname -->
                             <div class="mt-4">
                                 <x-input-label for="content" :value="__('Content')" />
                                 <x-text-input id="content" class="block mt-1 w-full" type="text" name="content" :value="old('content')" required autofocus autocomplete="content" />
                                 <x-input-error :messages="$errors->get('surname')" class="mt-2" />
                             </div>
                             <x-input-label for="category" :value="__('Category')" />
-                            <select name="topic_id" id="topic_id" class="form-control" required>
+                            <select name="topic_id" id="topic_id" class="form-control bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg" required>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach

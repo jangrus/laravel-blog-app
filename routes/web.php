@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserRolesController;
+use App\Models\Post;
+use App\Models\UserRoles;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 
@@ -17,7 +20,9 @@ use App\Http\Controllers\PostController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('posts.index', [
+        'posts' => Post::all(),
+    ]);
 });
 
 Route::get('/dashboard', function () {
@@ -46,3 +51,16 @@ Route::get('myposts', [PostController::class, 'userPosts'])
 Route::get('mycomments', [CommentController::class, 'userComments'])
     ->middleware('auth')
     ->name('mycomments');
+
+Route::get('editroles', [ProfileController::class, 'editRoles'])
+    ->middleware('auth')
+    ->name('editroles');
+
+Route::patch('edit-user-role', [UserRolesController::class, 'update'])
+    ->middleware('auth')
+    ->name('edit-user-role');
+
+Route::post('likePost', [PostController::class, 'likePost'])
+    ->middleware('auth')
+    ->name('likePost');
+
