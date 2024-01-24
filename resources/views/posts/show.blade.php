@@ -20,7 +20,29 @@
                         <div class="prose mt-6 text-gray-300">
                             {!! $post->html !!}
                         </div>
+                        <br>
+                        Likes: {{ $post->likesCount }}
+                        <br>
+                        <br>
+                        <div class="flex mt-12 text-gray-300 ">
+                            <form action="{{ route('likePost') }}"
+                                  method="post">
+                                <input name='value' type='hidden' value='1'>
+                                <input name='postId' type='hidden' value='{{$post->id}}'>
+                                @csrf
+                                <x-primary-button type="submit" class="btn btn-primary">Like</x-primary-button>
+                            </form>
+                            <div class="ml-4"></div>
+                            <form action="{{ route('likePost') }}"
+                                  method="post">
+                                <input name='value' type='hidden' value='0'>
+                                <input name='postId' type='hidden' value='{{$post->id}}'>
+                                @csrf
+                                <x-primary-button type="submit" class="btn btn-primary">Dislike</x-primary-button>
+                            </form>
 
+                        </div>
+                        <br>
                         <div class="mt-12 text-gray-300">
                             <h2 id="comments" class="text-2xl font-semibold">Comments</h2>
 

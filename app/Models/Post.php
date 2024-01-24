@@ -49,4 +49,19 @@ class Post extends Model
     {
         return Attribute::get(fn () => str($this->content)->markdown());
     }
+
+    public function likesCount(): Attribute
+    {
+        $count = 0;
+
+        $likes = Like::where('post_id', $this->id)->get();
+        foreach ($likes as $like) {
+            $count += $like->value;
+        }
+        return Attribute::get(fn()=>$count);
+    }
+
+    public function likes() {
+        return $this->hasMany(Like::class);
+    }
 }
