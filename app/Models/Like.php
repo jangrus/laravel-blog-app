@@ -26,4 +26,5 @@ class Like extends Model
     {
         $this->belongsTo(User::class);
     }
+
 }

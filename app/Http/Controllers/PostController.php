@@ -36,7 +36,12 @@ class PostController extends Controller
         $postData['user_id'] = Auth::id();
         $postData['created_by'] = Auth::id();
 
-        Post::create($postData);
+        $post = Post::create($postData);
+
+        return view('posts.show', [
+            'post' => $post,
+            'comments' => $post->comments()->latest()->with('user')->paginate(10),
+        ]);
     }
 
     public function show(Post $post)
@@ -83,10 +88,4 @@ class PostController extends Controller
         ]);
     }
 
-    public function getLikes(Post $post){
-        $count = 0;
-
-        $likes = Like::where('post_id', $post->id)->get();
-        $a=1;
-    }
 }

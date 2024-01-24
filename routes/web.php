@@ -63,3 +63,4 @@ Route::patch('edit-user-role', [UserRolesController::class, 'update'])
 Route::post('likePost', [PostController::class, 'likePost'])
     ->middleware('auth')
     ->name('likePost');
+
